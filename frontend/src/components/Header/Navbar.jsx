@@ -31,11 +31,13 @@ function Header() {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Left section: Logo */}
         <Link href="/">
-          <img
+          {/* <img
             src="https://www.couponzguru.com/wp-content/themes/cguru-v2/img/logo.svg"
             alt="logo"
             className="h-10 md:h-12 w-auto"
-          />
+          /> */}
+
+          CouponCulture
         </Link>
 
         {/* Desktop Nav */}

@@ -42,8 +42,8 @@ export default function Categories() {
       <div className="w-full mx-auto overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-r from-amber-300 to-indigo-700 p-8">
         <Slider {...settings}>
           {categories.map((category, index) => (
-            <div key={index} className="-3">
-              <div className="bg-white text-center text-lg font-semibold py-6 px-4 rounded-xl shadow-md">
+            <div key={index} className="-3 " >
+              <div className=" w-[90%] bg-white text-center text-lg font-semibold py-6 px-4 rounded-xl shadow-md">
                 {category.item}
               </div>
             </div>

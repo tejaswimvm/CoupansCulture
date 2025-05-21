@@ -12,6 +12,7 @@ export default function Offers() {
   const fetchOffers = async () => {
     try {
       const response = await axios.get(base_url + `/api/coupon/getAllCoupon`);
+      console.log("---data---",response.data)
       setOffers(response.data.data);
     } catch (error) {
       console.log(error);
@@ -22,10 +23,43 @@ export default function Offers() {
    fetchOffers()
   },[])
  
+  // const handleOpenModal = (offer) => {
+  //   setSelectedOffer(offer);
+  //   setIsModalOpen(true);
+
+  //   window.open('/reedem', '_blank');
+  // };
+
+
   const handleOpenModal = (offer) => {
-    setSelectedOffer(offer);
-    setIsModalOpen(true);
-  };
+  setSelectedOffer(offer);
+  setIsModalOpen(true);
+
+  // Copy the offer code to clipboard
+  navigator.clipboard.writeText(offer.code)
+    .then(() => {
+      console.log("Code copied:", offer.code);
+    })
+    .catch((err) => {
+      console.error("Failed to copy code:", err);
+    });
+
+   const test = {
+      code:offer?.code,
+      website:offer?.website
+   }
+
+  // Open the redeem page in a new tab
+
+  // const encodedOffer = encodeURIComponent(JSON.stringify(offer));
+  // window.open(`/reedem?data=${encodedOffer}`, '_blank');
+
+
+  const encodedOffer = encodeURIComponent(btoa(JSON.stringify(test)));
+  window.open(`/reedem?data=${encodedOffer}`, '_blank');
+  // window.open('/reedem', '_blank');
+};
+
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -48,10 +82,10 @@ export default function Offers() {
                 alt={`Offer ${index + 1}`}
                 className="w-32 h-16 object-contain mb-4"
               />
-              <p className="text-gray-700 mb-6 text-[1.2rem]">{offer.description}</p>
+              <p className="text-gray-700 mb-6 text-[1.2rem] line-clamp-3">{offer.description}</p>
               <button
                 onClick={() => handleOpenModal(offer)}
-                className="mt-auto px-5 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition"
+                className="cursor-pointer mt-auto px-5 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition"
               >
                 Get Coupon
               </button>
