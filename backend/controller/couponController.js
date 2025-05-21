@@ -77,7 +77,6 @@ export const getAllCoupon = async (req , res) =>{
     } catch (error) {
         console.log(error);
         res.status(404).json({message:"Server Error"});
-
     }
 }
 
