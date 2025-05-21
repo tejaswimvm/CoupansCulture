@@ -2,36 +2,36 @@
 import { FaFacebook, FaTwitter, FaInstagram, FaGithub } from "react-icons/fa";
 
 const Footer = () => {
-  const footerNavs = [
-    {
-      label: "Quick Links",
-      items: [
-        { href: "#", name: "Home" },
-        { href: "#", name: "News" },
-        { href: "#", name: "Viral Stories" },
-        { href: "#", name: "Match Score" },
-      ],
-    },
-    {
-      label: "Company",
-      items: [
-        { href: "#", name: "About Us" },
-        { href: "#", name: "Careers" },
-        { href: "#", name: "Contact" },
-        { href: "#", name: "Privacy Policy" },
-      ],
-    },
-    {
-      label: "Resources",
-      items: [
-        { href: "#", name: "Terms of Service" },
-        { href: "#", name: "FAQs" },
-        { href: "#", name: "Support" },
-        { href: "#", name: "Advertising" },
-      ],
-    },
-  ];
-
+  // const footerNavs = [
+  //   // {
+  //   //   label: "Quick Links",
+  //   //   items: [
+  //   //     { href: "#", name: "Home" },
+  //   //     { href: "#", name: "News" },
+  //   //     { href: "#", name: "Viral Stories" },
+  //   //     { href: "#", name: "Match Score" },
+  //   //   ],
+  //   // },
+  //   {
+  //     label: "Company",
+  //     items: [
+  //       { href: "#", name: "About Us" },
+  //       { href: "#", name: "Careers" },
+  //       { href: "#", name: "Contact" },
+  //       { href: "#", name: "Privacy Policy" },
+  //     ],
+  //   },
+  //   {
+  //     label: "Resources",
+  //     items: [
+  //       { href: "#", name: "Terms of Service" },
+  //       { href: "#", name: "FAQs" },
+  //       { href: "#", name: "Support" },
+  //       { href: "#", name: "Advertising" },
+  //     ],
+  //   },
+  // ];
+  const footerNavs = [];
   return (
     <footer className="bg-[#1d1d1d] text-gray-300 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-screen-xl mx-auto">
@@ -39,10 +39,11 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center border-b border-[#333] pb-6 gap-4">
           <div className="text-center md:text-left">
             <h2 className="text-white text-xl font-semibold">
-              Stay Updated with <span className="text-yellow-400">Top5Shots</span>
+              Stay Updated with{" "}
+              <span className="text-yellow-400">Coupans Culture</span>
             </h2>
             <p className="text-xs text-gray-400 mt-1">
-              Get the latest trending stories and updates in your inbox.
+              Get the latest trending coupans and updates in your inbox.
             </p>
           </div>
 
@@ -63,10 +64,12 @@ const Footer = () => {
         </div>
 
         {/* Middle: Links */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10 text-center sm:text-left">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10 text-center sm:text-left">
           {footerNavs.map((nav, idx) => (
             <div key={idx}>
-              <h4 className="text-white text-base font-semibold mb-3">{nav.label}</h4>
+              <h4 className="text-white text-base font-semibold mb-3">
+                {nav.label}
+              </h4>
               <ul className="space-y-1 text-sm">
                 {nav.items.map((item, index) => (
                   <li key={index}>
@@ -81,11 +84,11 @@ const Footer = () => {
               </ul>
             </div>
           ))}
-        </div>
+        </div> */}
 
         {/* Bottom: Social & Legal */}
         <div className="mt-10 pt-4 border-t border-[#333] flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-400">
-          <p>© 2025 Top5Shots. All rights reserved.</p>
+          <p>© 2025 Coupans Culture. All rights reserved.</p>
           <div className="flex flex-wrap gap-3 justify-center md:justify-end">
             <a
               href="#"

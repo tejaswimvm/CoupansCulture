@@ -10,7 +10,7 @@ const MainHome = () => {
     <>
       
       <Hero />
-      <Categories />
+      {/* <Categories /> */}
       <Offers/>
       <Deals/>
       

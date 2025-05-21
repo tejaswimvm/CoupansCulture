@@ -54,7 +54,7 @@ function Header() {
         </nav>
 
         {/* Search Input */}
-        <div className="hidden md:flex items-center w-1/3 rounded-md bg-[#3b404b] px-2 py-1 border border-[#505866]">
+        {/* <div className="hidden md:flex items-center w-1/3 rounded-md bg-[#3b404b] px-2 py-1 border border-[#505866]">
           <Input
             type="text"
             placeholder="Search Products"
@@ -66,12 +66,13 @@ function Header() {
           >
             <MdSearch className="text-xl" />
           </Button>
-        </div>
+        </div> */}
 
         {/* Right section: Auth & Hamburger */}
+
         <div className="flex items-center gap-4">
           {/* Desktop Auth */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* <div className="hidden md:flex items-center gap-3">
             {auth.user ? (
               <>
                 <Avatar className="w-9 h-9 ring-2 ring-white">
@@ -104,7 +105,7 @@ function Header() {
                 </Link>
               </>
             )}
-          </div>
+          </div> */}
 
           {/* Mobile menu toggle */}
           <button
@@ -114,6 +115,7 @@ function Header() {
             {menuOpen ? <MdClose /> : <MdMenu />}
           </button>
         </div>
+
       </div>
 
       {/* Mobile Menu */}
