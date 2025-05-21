@@ -5,12 +5,22 @@ import { Pencil, Trash2, MoreHorizontal, Save, X } from "lucide-react";
 export default function Coupons() {
   const [coupons, setCoupons] = useState([]);
   const [editCoupon, setEditCoupon] = useState(null);
-  const [form, setForm] = useState({ title: "", code: "", website: "", description: "" });
-  const [selectedCoupon, setSelectedCoupon] = useState(null);
+  const [form, setForm] = useState({
+    title: "",
+    code: "",
+    website: "",
+    description: "",
+    logo: "",
+  });
+  const [dropdownOpen, setDropdownOpen] = useState(null);
 
   const fetchCoupons = async () => {
-    const res = await API.get("/api/coupon/getAllCoupon");
-    setCoupons(res.data.data);
+    try {
+      const res = await API.get("/api/coupon/getAllCoupon");
+      setCoupons(res.data.data);
+    } catch (error) {
+      console.error("Failed to load coupons", error);
+    }
   };
 
   useEffect(() => {
@@ -18,142 +28,199 @@ export default function Coupons() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this coupon?")) return;
-    await API.delete(`/api/coupon/delete/${id}`);
-    fetchCoupons();
+    if (!window.confirm("Confirm delete?")) return;
+    try {
+      await API.delete(`/api/coupon/delete/${id}`);
+      fetchCoupons();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const openEditModal = (coupon) => {
-    setEditCoupon(coupon._id);
-    setForm({ title: coupon.title, code: coupon.code, website: coupon.website, description: coupon.description });
+    setEditCoupon(coupon);
+    setForm({
+      title: coupon.title,
+      code: coupon.code,
+      website: coupon.website,
+      description: coupon.description,
+      logo: coupon.logo || "",
+    });
   };
 
   const closeEditModal = () => {
     setEditCoupon(null);
-    setForm({ title: "", code: "", website: "", description: "" });
   };
 
   const handleUpdate = async () => {
-    await API.put(`/api/coupon/update/${editCoupon}`, form);
-    closeEditModal();
-    fetchCoupons();
+    try {
+      await API.put(`/api/coupon/update/${editCoupon._id}`, form);
+      closeEditModal();
+      fetchCoupons();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FC] px-4 py-10 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8 text-gray-800 text-center">Manage Coupons</h2>
+    <div className="min-h-screen bg-gray-900 text-gray-100">
+      <main className="max-w-4xl mx-auto mt-8 px-6">
+        <section className="bg-gray-800 rounded-lg shadow-lg p-6">
+          <h2 className="text-xl font-semibold mb-6">Manage Coupons</h2>
 
-        <div className="overflow-x-auto bg-white shadow rounded-xl">
-          <table className="min-w-full text-sm text-gray-700">
-            <thead className="bg-[#F1F3F9] text-xs uppercase text-gray-500">
-              <tr>
-                <th className="px-6 py-4 text-left font-semibold">Title</th>
-                <th className="px-6 py-4 text-left font-semibold">Code</th>
-                <th className="px-6 py-4 text-left font-semibold">Website</th>
-                <th className="px-6 py-4 text-left font-semibold">Description</th>
-                <th className="px-6 py-4 text-center font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {coupons.map((coupon) => (
-                <tr key={coupon._id} className="border-b last:border-none hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">{coupon.title}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{coupon.code}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{coupon.website}</td>
-                  <td className="px-6 py-4 max-w-sm truncate">{coupon.description}</td>
-                  <td className="px-6 py-4 text-center relative">
-                    <button
-                      onClick={() => setSelectedCoupon(selectedCoupon === coupon._id ? null : coupon._id)}
-                      className="inline-flex items-center p-2 rounded-full hover:bg-gray-100"
+          <div className="overflow-x-auto">
+            <table className="w-full table-fixed text-sm">
+              <thead>
+                <tr className="bg-gray-700 text-gray-300 uppercase text-xs">
+                  <th className="p-3 w-16">Logo</th>
+                  <th className="p-3 w-32">Title</th>
+                  <th className="p-3 w-24">Code</th>
+                  <th className="p-3 w-48">Website</th>
+                  <th className="p-3">Description</th>
+                  <th className="p-3 w-24 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {coupons.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="py-8 text-center text-gray-500">
+                      No coupons found.
+                    </td>
+                  </tr>
+                ) : (
+                  coupons.map((c) => (
+                    <tr
+                      key={c._id}
+                      className="border-b border-gray-700 hover:bg-gray-700 transition"
                     >
-                      <MoreHorizontal size={18} />
-                    </button>
-                    {selectedCoupon === coupon._id && (
-                      <div className="absolute right-6 mt-2 w-48 bg-white border rounded-lg shadow-lg z-10">
-                        <button
-                          onClick={() => openEditModal(coupon)}
-                          className="block w-full px-4 py-2 text-sm hover:bg-gray-100 text-left"
+                      <td className="p-3 text-center">
+                        <img
+                          src={c.logo}
+                          alt="Logo"
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      </td>
+                      <td className="p-3" title={c.title}>
+                        {c.title}
+                      </td>
+                      <td
+                        className="p-3 text-blue-300 font-semibold"
+                        title={c.code}
+                      >
+                        {c.code}
+                      </td>
+                      <td className="p-3" title={c.website}>
+                        <a
+                          href={c.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="truncate block hover:text-blue-400"
                         >
-                          Edit
-                        </button>
+                          {new URL(c.website).host}
+                        </a>
+                      </td>
+                      <td
+                        className="p-3 truncate line-clamp-3"
+                        title={c.description}
+                      >
+                        {c.description}
+                      </td>
+                      <td className="p-3 text-center relative">
                         <button
-                          onClick={() => handleDelete(coupon._id)}
-                          className="block w-full px-4 py-2 text-sm hover:bg-gray-100 text-left text-red-600"
+                          onClick={() =>
+                            setDropdownOpen(
+                              dropdownOpen === c._id ? null : c._id
+                            )
+                          }
+                          className="p-2 hover:bg-gray-700 rounded-full"
                         >
-                          Delete
+                          <MoreHorizontal className="text-gray-300" />
                         </button>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-              {coupons.length === 0 && (
-                <tr>
-                  <td colSpan="5" className="text-center py-6 text-gray-500">
-                    No coupons found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+                        {dropdownOpen === c._id && (
+                          <div className="absolute right-0 mt-2 w-32 bg-gray-800 border border-gray-700 rounded shadow-lg z-10">
+                            <button
+                              onClick={() => openEditModal(c)}
+                              className="w-full px-4 py-2 text-left hover:bg-gray-700 flex items-center"
+                            >
+                              <Pencil className="mr-2" /> Edit
+                            </button>
+                            <button
+                              onClick={() => handleDelete(c._id)}
+                              className="w-full px-4 py-2 text-left text-red-500 hover:bg-gray-700 flex items-center"
+                            >
+                              <Trash2 className="mr-2" /> Delete
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-      {editCoupon && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-          <div className="bg-white rounded-xl shadow-lg w-full max-w-lg p-6 relative">
-            <button
-              onClick={closeEditModal}
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-            >
-              <X size={20} />
-            </button>
-            <h3 className="text-xl font-semibold mb-4 text-gray-700">Edit Coupon</h3>
-            <div className="grid gap-4">
-              <input
-                className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={form.title}
-                onChange={(e) => setForm({ ...form, title: e.target.value })}
-                placeholder="Title"
-              />
-              <input
-                className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={form.code}
-                onChange={(e) => setForm({ ...form, code: e.target.value })}
-                placeholder="Code"
-              />
-              <input
-                className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={form.website}
-                onChange={(e) => setForm({ ...form, website: e.target.value })}
-                placeholder="Website"
-              />
-              <textarea
-                className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
-                placeholder="Description"
-                rows={3}
-              />
-              <div className="flex gap-3 mt-2">
+        {/* Edit Modal */}
+        {editCoupon && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+            <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold">Edit Coupon</h3>
                 <button
-                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                  onClick={handleUpdate}
+                  onClick={closeEditModal}
+                  className="text-gray-400 hover:text-gray-200"
                 >
-                  <Save size={16} /> Save
+                  <X />
+                </button>
+              </div>
+              <div className="space-y-4">
+                {["title", "code", "website", "logo"].map((field) => (
+                  <input
+                    key={field}
+                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100"
+                    placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                    value={form[field]}
+                    onChange={(e) =>
+                      setForm({ ...form, [field]: e.target.value })
+                    }
+                  />
+                ))}
+                <textarea
+                  className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-100"
+                  placeholder="Description"
+                  rows={3}
+                  value={form.description}
+                  onChange={(e) =>
+                    setForm({ ...form, description: e.target.value })
+                  }
+                />
+                {form.logo && (
+                  <img
+                    src={form.logo}
+                    alt="Logo Preview"
+                    className="w-16 h-16 rounded-full mx-auto"
+                  />
+                )}
+              </div>
+              <div className="mt-6 flex justify-end space-x-3">
+                <button
+                  onClick={handleUpdate}
+                  className="flex items-center bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
+                >
+                  <Save className="mr-2" /> Save
                 </button>
                 <button
-                  className="flex items-center gap-2 bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
                   onClick={closeEditModal}
+                  className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-500"
                 >
-                  <X size={16} /> Cancel
+                  Cancel
                 </button>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </main>
     </div>
   );
 }
